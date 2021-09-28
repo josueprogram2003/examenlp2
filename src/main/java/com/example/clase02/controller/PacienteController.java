@@ -43,6 +43,7 @@ public class PacienteController {
 		try {
 			List<Paciente> list = new ArrayList<>();
 			list=pacienteimplement.readAll();
+			System.out.println("Pase");
 			if (list.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
@@ -64,8 +65,8 @@ public class PacienteController {
 		}
 	}
 	
-	@DeleteMapping("/delete/id")
-		public ResponseEntity<Paciente> delete(@PathVariable("id")int id){
+	@DeleteMapping("/delete/{id}")
+		public ResponseEntity<HttpStatus> delete(@PathVariable("id")int id){
 			try {
 				pacienteimplement.delete(id);
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -75,17 +76,19 @@ public class PacienteController {
 			}
 		}
 	
-	@PutMapping("/paciente/update/id")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<Paciente> update(@RequestBody Paciente p, @PathVariable("id") int id){
 		try {
+			System.out.println("Hola");
 			Paciente ul = pacienteimplement.read(id);
+			System.out.println(ul.getId());
 			if(ul.getId()>0) {
 				ul.setNombres(p.getNombres());
 				ul.setApellidos(p.getApellidos());
 				ul.setDni(p.getDni());
 				ul.setTelefono(p.getTelefono());
 				ul.setDireccion(p.getDireccion());
-				return new ResponseEntity<>(pacienteimplement.update(ul),HttpStatus.OK);
+				return new ResponseEntity<>(pacienteimplement.create(ul),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}			
